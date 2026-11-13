@@ -1,5 +1,7 @@
+
 #include<bits/stdc++.h>
 using namespace std;
+
 vector<string>keywords={"auto","break","case","char","const","continue","default","do","double","else","enum","extern","float","for","goto","if","int","long","register","return","short","signed","sizeof","static","struct","switch","typedef","union","unsigned","void","volatile","while"};
 
 bool iskeyword(string word){
@@ -28,7 +30,7 @@ int main(){
                     continue;
                 }
                 else if(next=='*'){
-                    char prev='/0';
+                    char prev='\0';
                     while(fp.get(ch)){
                        if(prev=='*' && ch=='/')
                             break;
@@ -38,10 +40,10 @@ int main(){
                 }
                 else{
                     fp.unget();
-                    cout<<"/ is an operator"<<endl;
-                    continue;
                 }
             }
+            cout<<"/ is an operator"<<endl;
+            continue;
         }
 
         if(ch=='"'||ch=='\''){
@@ -63,24 +65,31 @@ int main(){
         if(isalpha(ch)||ch=='_'){
             token="";
             token+=ch;
-            while(fp.get(ch) && (isalnum(ch)||ch=='_')){
-                token+=ch;
+            while(fp.get(ch)){
+                if(isalnum(ch)||ch=='_')
+                    token+=ch;
+                else{
+                    fp.unget();
+                    break;
+                }
             }
-            fp.unget();
             if(iskeyword(token))
                 cout<<token<<" is a keyword"<<endl;
             else
                 cout<<token<<" is an identifier"<<endl;
         }
 
-
         else if(isdigit(ch)){
             token="";
             token+=ch;
-            while(fp.get(ch) && isdigit(ch)){
-                token+=ch;
+            while(fp.get(ch)){
+                if(isdigit(ch))
+                    token+=ch;
+                else{
+                    fp.unget();
+                    break;
+                }
             }
-            fp.unget();
             cout<<token<<" is a number"<<endl;
         }
         
@@ -91,7 +100,8 @@ int main(){
                 token+=next;
             }
             else{
-                fp.unget();
+                if(fp)
+                    fp.unget();
             }
             cout<<token<<" is an operator"<<endl;
         }
@@ -104,4 +114,5 @@ int main(){
             cout<<ch<<" is an unknown character"<<endl;
         }
     }
+    fp.close();
 }
