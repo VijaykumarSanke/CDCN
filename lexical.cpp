@@ -1,7 +1,6 @@
 
 #include<bits/stdc++.h>
 using namespace std;
-
 vector<string>keywords={"auto","break","case","char","const","continue","default","do","double","else","enum","extern","float","for","goto","if","int","long","register","return","short","signed","sizeof","static","struct","switch","typedef","union","unsigned","void","volatile","while"};
 
 bool iskeyword(string word){
@@ -40,10 +39,10 @@ int main(){
                 }
                 else{
                     fp.unget();
+                    cout<<"/ is an operator"<<endl;
+                    continue;
                 }
             }
-            cout<<"/ is an operator"<<endl;
-            continue;
         }
 
         if(ch=='"'||ch=='\''){
@@ -65,14 +64,11 @@ int main(){
         if(isalpha(ch)||ch=='_'){
             token="";
             token+=ch;
-            while(fp.get(ch)){
-                if(isalnum(ch)||ch=='_')
-                    token+=ch;
-                else{
-                    fp.unget();
-                    break;
-                }
+            while(fp.get(ch) && (isalnum(ch)||ch=='_')){
+                token+=ch;
             }
+            if(fp)
+                fp.unget();
             if(iskeyword(token))
                 cout<<token<<" is a keyword"<<endl;
             else
@@ -82,14 +78,11 @@ int main(){
         else if(isdigit(ch)){
             token="";
             token+=ch;
-            while(fp.get(ch)){
-                if(isdigit(ch))
-                    token+=ch;
-                else{
-                    fp.unget();
-                    break;
-                }
+            while(fp.get(ch) && isdigit(ch)){
+                token+=ch;
             }
+            if(fp)
+                fp.unget();
             cout<<token<<" is a number"<<endl;
         }
         
